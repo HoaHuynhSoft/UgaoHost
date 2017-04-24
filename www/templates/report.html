@@ -1,0 +1,142 @@
+<ion-view style="" class="" id="" title="Thống kê">
+    <ion-content class="has-header" padding="true">
+        <div class="row" style="background-color: #886aea;margin-left: 0px;border-bottom: 1px solid #886aea;border-top-left-radius: 5px; border-top-right-radius: 5px;">
+            <div class="col">
+                <p style="margin-bottom:0px;color: white;">Hôm nay</p>
+            </div>
+        </div>
+         <div  style="border-left: 1px solid #886aea;border-right: 1px solid #886aea;margin-bottom:10px;margin-top:0px;border-bottom: 1px solid #886aea;">
+            <div class="row text-center" style="margin-bottom: 5px">
+                <div class="col" style="background-color: #e8b110; margin-right:5px;border-radius: 5px!important;">
+                    <p style="color: white;">Tổng tiền bán</p>
+                    <p style="color: white;">{{dataReport.totalMoneyInDay}}</p>
+                </div>
+                <div class="col" style="background-color: #d53f40; margin-left:5px;border-radius: 5px!important;">
+                    <p style="color: white;">Tổng đơn hàng</p>
+                    <p style="color: white;">{{dataReport.numOfOrder}}</p>
+                </div>
+            </div>
+            <div class="row text-center" style="margin-bottom: 5px;margin-top: 5px;">
+                <div class="col" style="background-color: #9abc32; margin-right:5px;border-radius: 5px!important;">
+                    <p style="color: white;">Chờ xác nhận</p>
+                    <p style="color: white;">{{dataReport.numofWaitingOrder}}</p>
+                </div>
+                <div class="col" style="background-color: #1caf91; margin-left:5px;border-radius: 5px!important;">
+                    <p style="color: white;">Đơn Thành Công</p>
+                    <p style="color: white;">{{dataReport.numofSuccessOrder}}</p>
+                </div>
+            </div>
+         </div>
+       
+        <!-- Thống kê -->
+        <div class="row" style="background-color: #886aea;margin-left: 0px;border-bottom: 1px solid #886aea;border-top-left-radius: 5px; border-top-right-radius: 5px;">
+            <div class="col">
+                <p style="margin-bottom:0px;color: white;">Thống kê tháng này</p>
+            </div>
+        </div>
+        <div class="row" style="border-left: 1px solid #886aea;border-right: 1px solid #886aea;margin-bottom:0px">
+            <div class="col col-60">
+                <p style=" font-size: 12px; margin-left:10px; margin-top: 10px; margin-bottom: 0px;">Tổng tiền bán: </p>
+            </div>
+            <div class="col">
+                <p style="font-size: 12px; margin-left:10px; margin-top: 10px; margin-bottom: 0px;">10,500,000đ</p>
+            </div>
+        </div>
+        <div class="row" style="border-left: 1px solid #886aea;border-right: 1px solid #886aea;margin-bottom:0px;margin-top:0px">
+            <div class="col col-60">
+                <p style="font-size: 12px; margin-left:10px; margin-top: 0px; margin-bottom: 0px;">Tổng đơn hàng thành công: </p>
+            </div>
+            <div class="col">
+                <p style="font-size: 12px; margin-left:10px; margin-top: 0px; margin-bottom: 0px;">32 đơn</p>
+            </div>
+        </div>
+        <div class="row" style="border-left: 1px solid #886aea;border-right: 1px solid #886aea;border-bottom: 1px solid #886aea;margin-bottom:0px;margin-top:0px">
+            <div class="col col-60">
+                <p style="font-size: 12px; margin-left:10px; margin-top: 0px; margin-bottom: 0px;">Tổng đơn hàng thất bại: </p>
+            </div>
+            <div class="col">
+                <p style="font-size: 12px; margin-left:10px; margin-top: 0px; margin-bottom: 0px;">5 đơn</p>
+            </div>
+        </div>
+        <!-- End Thống kê -->
+
+        <!-- Kho -->
+        <!--<div class="row" style="margin-top: 10px;background-color: #886aea;margin-left: 0px;border-bottom: 1px solid #886aea;border-top-left-radius: 5px; border-top-right-radius: 5px;">
+            <div class="col">
+                <p style="margin-bottom:0px;color: white;">Kho hàng hiện tại</p>
+            </div>
+        </div>
+        <div class="row" style="border-left: 1px solid #886aea;border-right: 1px solid #886aea;margin-bottom:0px">
+            <div class="col col-60">
+                <p style=" font-size: 12px; margin-left:10px; margin-top: 10px; margin-bottom: 0px;">Còn trong kho: </p>
+            </div>
+            <div class="col">
+                <p style="font-size: 12px; margin-left:10px; margin-top: 10px; margin-bottom: 0px;">120 bình</p>
+            </div>
+        </div>
+        <div class="row" style="border-left: 1px solid #886aea;border-right: 1px solid #886aea;margin-bottom:0px;margin-top:0px">
+            <div class="col col-60">
+                <p style="font-size: 12px; margin-left:10px; margin-top: 0px; margin-bottom: 0px;">Sắp hết hàng</p>
+            </div>
+            <div class="col">
+                <p style="font-size: 12px; margin-left:10px; margin-top: 0px; margin-bottom: 0px;">3 loại</p>
+            </div>
+        </div>
+        <div class="row" style="border-left: 1px solid #886aea;border-right: 1px solid #886aea;border-bottom: 1px solid #886aea;margin-bottom:0px;margin-top:0px">
+            <div class="col col-60">
+                <p style="font-size: 12px; margin-left:10px; margin-top: 0px; margin-bottom: 0px;">Tổng loại trong kho: </p>
+            </div>
+            <div class="col">
+                <p style="font-size: 12px; margin-left:10px; margin-top: 0px; margin-bottom: 0px;">22 loại</p>
+            </div>
+        </div>-->
+        <!-- End Kho -->
+
+        <!-- Xu hướng -->
+        <!--<div class="row text-center" style="margin-top:10px; background-color: #886aea;margin-left: 0px;border-bottom: 1px solid #886aea;border-top-left-radius: 5px; border-top-right-radius: 5px;">
+            <div class="col">
+                <p style="margin-bottom:0px;color: white;">Sản phẩm bán chạy</p>
+            </div>
+        </div>
+        <ion-list>
+        <div class="card item-avatar" ng-repeat="item in items| filter:filterOrder.name" ng-click="itemClick(item)" ng-if="$index<numberMaxItem">
+            <img  ng-src="{{'img/'+ item.image +'.jpg'}}" style="margin-left: 10px;margin-top: 15px"> 
+            <p style="font-size: 12px; color: gray; margin-bottom: 0px;margin-top: 15px"><b>{{item.name}}</b></p>
+            <p style="font-size: 12px; color:gray; margin-bottom: 0px;" >SL còn: {{item.stock}} - SL rỗng: {{item.emptyGas}}</p>
+            <p style="font-size: 12px; color:gray; margin-bottom: 0px;" ></p>
+            <p style="font-size: 12px; color: green; margin-bottom: 0px"><b>Gas: {{item.price| currency:"":0}}đ</b></p> 
+            <p style="font-size: 12px; color: green; margin-bottom: 10px"><b>Vỏ + Gas: {{item.price| currency:"":0}}đ</b></p>                
+        </div>
+      </ion-list>-->
+        <!-- End Xu hướng -->
+
+        <div class="row text-center" style="margin-top:10px; background-color: #886aea;margin-left: 0px;border-bottom: 1px solid #886aea;border-top-left-radius: 5px; border-top-right-radius: 5px;">
+            <div class="col">
+                <p style="margin-bottom:0px;color: white;">Các đơn hàng chờ xác nhận</p>
+            </div>
+        </div>
+        <ion-list>
+        <div class="card item-avatar" ng-repeat="order in ordersNew| orderBy:'-OrderDate'" ng-click="orderClick(order._id)" ng-if="$index<5">
+            <img  src="img/client/orders.png" style="margin-left: 10px;margin-top: 5px"> 
+            <p style="font-size: 12px; color: gray; margin-bottom: 0px"><b>SĐT: {{order.PhoneNumber}}</b></p>
+            <p style="font-size: 12px; color:gray; margin-bottom: 0px;" >Ngày: {{order.OrderDate | date:"dd/MM/yyyy 'lúc' h:mma"}}</p>
+            <p style="font-size: 12px; color: green; margin-bottom: 0px;">Trạng thái: {{order.Status}}</p>
+            <p style="font-size: 12px; color: green; margin-bottom: 0px"><b>Tổng: {{order.Total| currency:"":0}}đ</b></p>                 
+        </div>
+        </ion-list>
+        <div class="row text-center" style="margin-top:10px;background-color: #886aea;margin-left: 0px;border-bottom: 1px solid #886aea;border-top-left-radius: 5px; border-top-right-radius: 5px;">
+            <div class="col">
+                <p style="margin-bottom:0px;color: white;">Các đơn hàng đang chuyển đi</p>
+            </div>
+        </div>
+        <ion-list>
+        <div class="card item-avatar" ng-repeat="order in orders| orderBy:'-OrderDate'" ng-click="orderClick(order._id)" ng-if="$index<5">
+            <img  src="img/client/orders.png" style="margin-left: 10px;margin-top: 5px"> 
+            <p style="font-size: 12px; color: gray; margin-bottom: 0px"><b>SĐT: {{order.PhoneNumber}}</b></p>
+            <p style="font-size: 12px; color:gray; margin-bottom: 0px;" >Ngày: {{order.OrderDate | date:"dd/MM/yyyy 'lúc' h:mma"}}</p>
+            <p style="font-size: 12px; color: green; margin-bottom: 0px;">Trạng thái: {{order.Status}}</p>
+            <p style="font-size: 12px; color: green; margin-bottom: 0px"><b>Tổng: {{order.Total| currency:"":0}}đ</b></p>                 
+        </div>
+      </ion-list>
+    </ion-content>
+</ion-view>

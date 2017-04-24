@@ -1,0 +1,46 @@
+<ion-view style="" class=" " id="page9" title="Thông tin khách hàng">
+    <ion-content class="has-header" padding="true">
+      <div>
+        <p>Số đơn hàng:
+          <strong> {{numOrders}} đơn</strong>
+        </p>
+        <p>Tổng tiền đã mua:
+          <strong> {{totalOrdersPrice| currency:"":0}}đ</strong>
+        </p>
+      </div>
+      <div class="card">
+        <div class="item item-divider item-icon-right" ng-click = "headerInfoClick()">
+          <i class="icon" ng-class="{'ion-ios-arrow-right':headerField,'ion-ios-arrow-down':!headerField}"></i>
+          Thông tin khách hàng
+        </div>
+        <ion-list ng-show="!headerInfo">
+            <ion-item class = "item-remove-animate item-icon-left" >
+                <h2>Tên: {{curUser.FullName}}</h2>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+            <ion-item class = "item-remove-animate item-icon-left" >
+                <h2>Sđt: {{curUser.Phone}}</h2>
+                <i class="icon ion-chevron-right icon-accessory"></i>   
+            </ion-item>
+            <ion-item class = "item-remove-animate item-icon-left" >
+                <h2>Đ/c: {{curUser.Address}}</h2>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+            <div class="row">
+            <div class="col text-center">
+              <a class="button icon-left ion-ios-color-wand-outline button-clear button-positive" ng-click = "editInfo()">Sửa thông tin</a>
+            </div>
+          </div>
+        </ion-list>
+     </div>
+      <ion-list>
+        <div class="card item-avatar" ng-repeat="order in orders| filter:filterOrder| orderBy:'-OrderDate'" ng-click="orderClick(order._id)">
+            <img  src="img/client/orders.png" style="margin-left: 10px;margin-top: 5px"> 
+            <p style="font-size: 12px; color: gray; margin-bottom: 0px;margin-top: 10px"><b>Mã: {{order._id}}</b></p>
+            <p style="font-size: 12px; color:gray; margin-bottom: 0px;" >Ngày: {{order.OrderDate | date:"dd/MM/yyyy 'lúc' h:mma"}}</p>
+            <p style="font-size: 12px; color: green; margin-bottom: 0px;">Trạng thái: {{order.StatusString}}</p>
+            <p style="font-size: 12px; color: green; margin-bottom: 10px"><b>Tổng: {{order.Total| currency:"":0}}đ</b></p>                 
+        </div>
+      </ion-list>
+    </ion-content>
+</ion-view>

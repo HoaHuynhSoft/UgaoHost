@@ -1,0 +1,106 @@
+<ion-view style="" class=" " id="page9" title="Giỏ hàng">
+    <ion-content class="has-header" padding="true">
+      <div class="row text-center">
+        <div class = "col">
+            <p style="color: blueviolet; font-size: 16px;">
+          <strong> {{curCart.OrderDetails.length}} Loại gas</strong>
+        </p>
+        </div>
+        <div class = "col">
+          <p style="color: blueviolet; font-size: 16px;">Tổng:
+          <strong> {{curCart.Total| currency:"":0}}đ</strong>
+        </p>
+        </div>
+      </div>
+      <button ng-click="addItemClick()" class="button button-royal button-block ">Thêm sản phẩm</button>
+      <div class="card">
+        <div class="item item-divider item-icon-right" ng-click = "headerInfoClick()">
+          <i class="icon" ng-class="{'ion-ios-arrow-right':headerInfo,'ion-ios-arrow-down':!headerInfo}"></i>
+          Thông tin đặt hàng
+        </div>
+        <ion-list ng-show="!headerInfo">
+            <ion-item class = "item-remove-animate item-icon-left" >
+                <label class="item item-input"><input type="text" ng-model="curUser.FullName" placeholder="Tên"> </label>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+            <ion-item class = "item-remove-animate item-icon-left" >
+                <label class="item item-input"><input type="text" ng-model="curUser.Phone" placeholder="SĐT"> </label> 
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+            <ion-item class = "item-remove-animate item-icon-left" >
+                <label class="item item-input"><input type="text" ng-model="curUser.Address" placeholder="Địa chỉ"> </label>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+            <ion-item class = "item-remove-animate item-icon-left" >
+                <label class="item item-input"><input type="text" ng-model="rootNote.Note" placeholder="Lưu ý khi giao hàng"> </label>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+            <div class="row">
+              <div class="col text-center">
+                <a class="button icon-left ion-ios-color-wand-outline button-clear button-positive" ng-click = "editInfo()">Sửa thông tin</a>
+              </div>
+            </div>
+        </ion-list>
+     </div>
+     <div class="card">
+        <div class="item item-divider item-icon-right" ng-click = "headerCouponClick()">
+          <i class="icon" ng-class="{'ion-ios-arrow-right':headerCoupon,'ion-ios-arrow-down':!headerCoupon}"></i>
+          Bạn có mã giảm giá?
+        </div>
+        <ion-list ng-show="!headerCoupon">
+            <ion-item class = "item-remove-animate item-icon-left" >
+                <input style= "width: 100%;" type="text" ng-model="rootNote.Note" placeholder="Mã giảm giá" >
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+             <div class="row">
+              <div class="col text-center">
+                <a class="button icon-left ion-ios-color-wand-outline button-clear button-positive" ng-click = "couponClick()">Xác nhận mã giảm giá</a>
+              </div>
+            </div>
+        </ion-list>
+     </div>
+  
+          <div class="item item-body"  ng-repeat="detail in curCart.OrderDetails track by $index" style="margin-top:5px; margin-bottom: 5px; padding-bottom: 0px">
+            <div class= "row">
+                <div class= "col col-40">
+                  <img ng-src="{{'img/'+ detail.Item.image+'.jpg'}}" width="80%" height="auto" style="box-shadow: none;">
+                </div>
+                <div class= "col" >
+                  <p style="color: gray; font-size: 12px;margin-bottom: 0px;margin-top: 10px;">Tên<strong> {{detail.Item.name}}</strong></p>
+                  <p style="color: gray; font-size: 12px;margin-bottom: 0px;margin-top: 0px;">Gas: <strong>{{detail.Item.price| currency:"":0}}đ</strong></strong></p>
+                  <p style="color: gray; font-size: 12px;margin-bottom: 0px;margin-top: 0px;">Gas + Vỏ <strong>{{detail.Item.priceFull| currency:"":0}}đ</strong></p>
+                </div>
+						</div>
+            <div class= "row text-center" style="margin-top: -20px" >
+              <div class= "col col-40" style="margin-bottom: 0px;margin-top: 0px;">
+              </div>
+              <div class= "col " style="margin-bottom: 0px;margin-top: 0px;">
+                   <input style="color: dimgray; font-size: 12px; width: 70px;padding-bottom: 0px !important;padding-top: 0px !important;;background: transparent;" type="text" value="SL Gas:" disabled="disabled">
+              </div>
+              <div class= "col" style="margin-bottom: 0px;margin-top: 0px;">
+                   <input style="color: dimgray; font-size: 12px;padding-bottom: 0px !important;padding-top: 0px !important;; width:50px;text-align: right;" type="number" ng-model="detail.NumGas" ng-change="numGasChange(detail)">
+              </div>
+              <div class= "col" style="margin-bottom: 0px;margin-top: 0px;">
+                   <input style="color: dimgray; font-size: 12px;padding-bottom: 0px !important;padding-top: 0px !important;;background: transparent;width:30px" type="text" value=" bình" disabled="disabled">
+              </div>
+            </div>
+            <div class= "row text-center" style="margin-top: -20px" >
+              <div class= "col col-40" style="margin-bottom: 0px;margin-top: 0px;">
+              </div>
+              <div class= "col " style="margin-bottom: 0px;margin-top: 0px;">
+                   <input style="color: dimgray; font-size: 12px;width: 70px; padding-bottom: 0px;padding-top: 0px;background: transparent;" type="text" value="SL Gas + Vỏ:" disabled="disabled">
+              </div>
+              <div class= "col" style="margin-bottom: 0px;margin-top: 0px;">
+                   <input style="color: dimgray; font-size: 12px;padding-bottom: 0px;padding-top: 0px; width:50px;text-align: right;"  type="number" ng-model="detail.NumGasAndCylinder" ng-change="numGasAndCylinderChange(detail)">
+              </div>
+              <div class= "col" style="margin-bottom: 0px;margin-top: 0px;">
+                   <input style="color: dimgray; font-size: 12px;padding-bottom: 0px;padding-top: 0px;background: transparent;width:30px" type="text" value=" bình" disabled="disabled">
+              </div>
+            </div>
+            <div class="button-bar" style="box-shadow: none;">
+                <button ng-click="removeDetail(detail)" class="button button-dark button-block button-small icon ion-android-delete" ></button>
+            </div>
+          </div>
+    <button ng-click="order()" class="button button-assertive button-block ">Đặt hàng</button>
+    </ion-content>
+</ion-view>

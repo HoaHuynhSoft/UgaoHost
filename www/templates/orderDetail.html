@@ -1,0 +1,109 @@
+<ion-view style="" class=" " id="page9" title="Chi tiết đơn hàng">
+    <ion-content class="has-header" padding="true">
+      <div class="card" style=" margin-top: 5px" >          
+          <div class="button-bar">
+            <a class="button button-small button-energized" ng-if="isShowSaveButon" ng-click="save()">Lưu</a>
+            <a class="button button-small button-balanced" ng-if="isShowConfirmButton" ng-click="confirm()">Xác nhận</a>
+            <a class="button button-small button-balanced" ng-if="isShowUnConfirmButton" ng-click="unConfirm()">Hủy xác nhận</a>
+            <a class="button button-small button-dark" ng-if="isShowCancelButton" ng-click="cancel()">Hủy đơn</a>
+          </div>
+      </div>
+       <div class="row text-center">
+          <div class = "col">
+            <p style="color: blueviolet; font-size: 16px;">
+              <strong> {{curOrder.StatusString}}</strong>
+             </p>
+        </div>
+      </div>
+      <div class="row text-center">
+        <div class = "col">
+          <p style="color: blueviolet; font-size: 16px;">Tổng:
+          <strong> {{curOrder.Total| currency:"":0}}đ</strong>
+        </p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="item item-divider item-icon-right" ng-click = "headerInfoClick()">
+          <i class="icon" ng-class="{'ion-ios-arrow-right':headerField,'ion-ios-arrow-down':!headerField}"></i>
+          Thông tin đặt hàng
+        </div>
+        <ion-list ng-show="!headerInfo">
+            <ion-item class = "item-remove-animate item-icon-left" >
+                <h2 style="font-size: 14px; white-space: normal;">Tên: {{curOrder.Name}}</h2>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+            <ion-item class = "item-remove-animate item-icon-left" >
+                <a ng-href="tel: {{curOrder.PhoneNumber}}" style="color: green">Sđt: {{curOrder.PhoneNumber}}</a>
+                <i class="icon ion-ios-telephone icon-balanced" style="color: green"></i>   
+            </ion-item>
+            <ion-item class = "item-remove-animate item-icon-left" >
+                <h2 style="font-size: 14px; white-space: normal;">Đ/c: {{curOrder.Address}}</h2>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+            <ion-item class = "item-remove-animate item-icon-left" >
+                <h2 style="font-size: 14px; white-space: normal;">Ghi chú: {{curOrder.Note}}</h2>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+            <div class="row">
+            <div class="col text-center">
+              <a class="button icon-left ion-ios-color-wand-outline button-clear button-positive" ng-click = "editInfo()">Sửa thông tin</a>
+            </div>
+          </div>
+        </ion-list>
+     </div>
+      <div class="card">
+        <div class="item item-divider item-icon-right" ng-click = "headerInfoClick()">
+          <i class="icon" ng-class="{'ion-ios-arrow-right':headerField,'ion-ios-arrow-down':!headerField}"></i>
+          Thông chuyển hàng
+        </div>
+        <ion-list ng-show="!headerInfo">
+            <ion-item class = "item-remove-animate item-icon-left" >
+                <a ng-href="tel: {{curOrder.PhoneNumber}}" style="color: green">Người chuyển: {{curOrder.Name}}</a>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+            <ion-item class = "item-remove-animate item-icon-left" >
+                <a ng-href="tel: {{curOrder.PhoneNumber}}" style="color: green">Sđt: {{curOrder.PhoneNumber}}</a>
+                <i class="icon ion-ios-telephone icon-balanced" style="color: green"></i>   
+            </ion-item>
+            <ion-item class = "item-remove-animate item-icon-left" >
+                <h2 style="font-size: 14px; white-space: normal;">Giờ nhận chuyển đơn hàng: {{curOrder.Address}}</h2>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+        </ion-list>
+     </div>
+      <div class="card" style=" margin-top: 5px" >          
+          <div class="button-bar">
+            <a class="button button-small button-royal" ng-click="addItemClick()">Thêm sản phẩm</a>
+          </div>
+      </div>
+      <div class="item item-body"  ng-repeat="detail in curOrder.OrderDetails track by $index" style="margin-top:5px; margin-bottom: 5px; padding-bottom: 0px">
+            <div class= "row">
+                <div class= "col col-40">
+                  <img ng-src="{{'img/'+ detail.Item.image+'.jpg'}}" width="80%" height="auto" style="box-shadow: none;">
+                </div>
+                <div class= "col" >
+                  <p style="color: gray; font-size: 12px;margin-bottom: 0px;margin-top: 10px;">Tên<strong> {{detail.Item.name}}</strong></p>
+                  <p style="color: gray; font-size: 12px;margin-bottom: 0px;margin-top: 0px;">Giá: <strong>{{detail.Item.price| currency:"":0}}đ/Kg</strong></strong></p>
+                  <p style="color: gray; font-size: 12px;margin-bottom: 0px;margin-top: 0px;">Loại bao <strong>{{detail.kilogramType}} Kg</strong></p>
+                </div>
+						</div>
+            <div class= "row text-center" style="margin-top: -20px" ng-if="detail.NumGas!=0">
+              <div class= "col col-40" style="margin-bottom: 0px;margin-top: 0px;">
+              </div>
+              <div class= "col " style="margin-bottom: 0px;margin-top: 0px;">
+                   <input style="color: dimgray; font-size: 12px; width: 70px;padding-bottom: 0px !important;padding-top: 0px !important;;background: transparent;" type="text" value="Số bao đặt:" disabled="disabled">
+              </div>
+              <div class= "col" style="margin-bottom: 0px;margin-top: 0px;">
+                   <input style="color: dimgray; font-size: 12px;padding-bottom: 0px !important;padding-top: 0px !important;; width:50px;text-align: right;" type="number" ng-model="detail.numOfKilogramType" ng-change="numBagChange(detail)">
+              </div>
+              <div class= "col" style="margin-bottom: 0px;margin-top: 0px;">
+                   <input style="color: dimgray; font-size: 12px;padding-bottom: 0px !important;padding-top: 0px !important;;background: transparent;width:30px" type="text" value=" Bao" disabled="disabled">
+              </div>
+            </div>
+            <div class="button-bar" style="box-shadow: none;">
+                <button ng-click="removeFromCart(detail)" class="button button-dark button-block button-small icon ion-android-delete" ></button>
+            </div>
+          </div>
+      
+  </ion-content>
+</ion-view>

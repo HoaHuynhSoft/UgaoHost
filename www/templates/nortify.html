@@ -1,0 +1,21 @@
+<ion-view style="" class=" " id="page11" title="Thông báo ">
+    <ion-content class="has-header" padding="true">
+        <ion-list>
+          <ion-item ng-repeat="item in nors" class="itemNor"> 
+              <div class="card">
+                <div class="row">
+                    <p style="white-space: normal; margin-top: 10px; margin-left: 10px; font-size: 15px; font-weight: bold;">Bạn gần hết gas chưa?, đặt ngay để hưởng giảm giá</p>
+                </div>
+                <div class="row buttonArray">
+                    <div class="buttonNor">
+                    <button class="button icon button-assertive btn" > Đặt</button>
+                    <button class="button icon button-royal btn">...</button>
+                    <button class="button  icon ion-android-delete btn" ng-click="onItemDelete2(item)"></button>
+                    </div>       
+                </div>
+            </div>
+          </ion-item>
+      </ion-list>
+      
+    </ion-content>
+</ion-view>

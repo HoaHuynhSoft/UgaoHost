@@ -1,0 +1,18 @@
+<ion-view style="" class=" " id="page10" title="Quản lí khách hàng">
+    <ion-content class="has-header" padding="true">
+      <label class="item item-input" style="background-color: aliceblue;">
+            <i class="icon ion-search placeholder-icon"></i>
+            <input type="text" ng-model="filterOrder.name" placeholder="Tìm tên sản phẩm" >
+      </label>
+      <ion-list>
+        <div class="card item-avatar" ng-repeat="user in users| filter:filterOrder.name" ng-click="userClick(user)" ng-if="$index<numberMaxItem">
+            <img  ng-src="{{'img/client/orders.png'}}" style="margin-left: 10px;margin-top: 5px"> 
+            <p style="font-size: 12px; color: gray; margin-bottom: 0px;margin-top: 15px"><b>{{user.FullName}}</b></p>                
+            <p style="font-size: 12px; color: gray; margin-bottom: 0px;margin-top: 0px">{{user.Phone}}</p>                
+            <p style="font-size: 12px; color: gray; margin-bottom: 0px;margin-top: 0px">{{user.Address}}</p>                
+        </div>
+      </ion-list>
+      	<div class="row"> <div style="height: 100px;"></div></div>
+      <ion-infinite-scroll ng-if="!noMoreItemsAvailable" icon="ion-loading-c" on-infinite="loadMore()" distance="10%"> </ion-infinite-scroll>
+    </ion-content>
+</ion-view>

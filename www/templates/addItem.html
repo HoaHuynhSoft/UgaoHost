@@ -1,0 +1,13 @@
+<label class="item item-input" style="background-color: aliceblue;">
+    <i class="icon ion-search placeholder-icon"></i>
+    <input type="text" ng-model="filterOrder.name" placeholder="Tìm tên sản phẩm" >
+</label>
+<ion-list>
+    <div class="card" ng-repeat="item in items| filter:filterOrder.name" ng-click="addItem(item)"> 
+        <p style="font-size: 12px; color: gray; margin-bottom: 0px; margin-left: 10px;margin-top: 15px"><b>{{item.name}}</b></p>
+        <p style="font-size: 12px; color:gray; margin-bottom: 0px; margin-left: 10px;" >SL còn: {{item.stock}} - SL Vỏ: {{item.emptyGas}}</p>
+        <p style="font-size: 12px; color:gray; margin-bottom: 0px; margin-left: 10px;" ></p>
+        <p style="font-size: 12px; color: green; margin-bottom: 0px; margin-left: 10px;"><b>Gas: {{item.price| currency:"":0}}đ</b></p> 
+        <p style="font-size: 12px; color: green; margin-bottom: 10px; margin-left: 10px;"><b>Vỏ + Gas: {{item.priceFull| currency:"":0}}đ</b></p>                
+    </div>
+</ion-list>

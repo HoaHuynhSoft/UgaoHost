@@ -1,0 +1,16 @@
+
+      <div >
+        <div class="item item-image" style="border-width: 0px; border-style: none;">
+            <img  ng-src="{{'img/'+ curItemClick.image +'.jpg'}}" style="width: 40%" />
+        </div>
+        <div class="text-center">
+            <label class="item item-input"><input type="text" ng-model="curItemClick.name" placeholder="Tên sản phẩm" > </label>
+            <label class="item item-input"><input type="text" ng-model="curItemClick.price" placeholder="Giá " > </label>
+            <h4>Mô tả</h4>
+        </div>
+        
+        <input style="word-wrap: break-word; background: #f4f4f4" type="text" ng-model="curItemClick.description" contenteditable="true">
+            
+        </input>
+        
+      </div>
