@@ -6,11 +6,12 @@ angular.module('app.controllers', [])
     $scope.user = {};
     /// Khi logout thì xóa hết dữ liệu tạm
     $scope.$on('$ionicView.enter', function(ev) {
+      //sharedUtils.showAlert("warning","vaologin");
       if(ev.targetScope !== $scope){
         $ionicHistory.clearHistory();
         $ionicHistory.clearCache();
       }
-       var un = $window.localStorage['username'];
+      var un = $window.localStorage['username'];
       var pass = $window.localStorage['pass'];
       console.log(un+pass);
       if (un != "" && pass != ""){
@@ -27,8 +28,10 @@ angular.module('app.controllers', [])
       }
       UserService.getUser(user.UserName) // lấy user bằng user name
         .then(function success(data){
-           console.log(data);
-            if((user.UserName == data.UserName) && (user.Pass == data.Pass) && data.Type == 2){
+          //sharedUtils.showAlert("warning",user.UserName);
+           //console.log(data);
+            if(user.UserName == data.UserName && user.Pass == data.Pass && data.Type == 2){
+              //sharedUtils.showAlert("warning","compare user data");
               $window.localStorage['username'] = user.UserName;
               $window.localStorage['pass'] = user.Pass;
               $rootScope.userName =data.FullName;
@@ -60,7 +63,7 @@ angular.module('app.controllers', [])
     }
 
   })
-.controller('indexCtrl', function($scope,UserService,$rootScope,sharedUtils,$ionicHistory,$state,$ionicSideMenuDelegate) {
+.controller('indexCtrl', function($scope,$window,UserService,$rootScope,sharedUtils,$ionicHistory,$state,$ionicSideMenuDelegate) {
     $scope.logout=function(){
       $ionicSideMenuDelegate.toggleLeft(); //To close the side bar
         $ionicSideMenuDelegate.canDragContent(false);  // To remove the sidemenu white space
@@ -68,6 +71,8 @@ angular.module('app.controllers', [])
           historyRoot: true
         });
         $rootScope.extras = false;
+        $window.localStorage['username']="";
+        $window.localStorage['pass']="";
         sharedUtils.hideLoading();
       $state.go('tabLogin.login', {}, {location: "replace"});
     }
@@ -78,104 +83,99 @@ angular.module('app.controllers', [])
     $scope.curUser = {};
     $scope.rootNote = {};
     $scope.items= {};
-    $scope.headerInfo = false;
+    $scope.headerInfo = true;
+    $scope.headerAddProduct = true;
+    $scope.showProducts = true;
     $rootScope.extras=true;
     $scope.curCart = {};
+    $scope.weight=10; 
+    $scope.Total=0;
+    $scope.data={};
+    $scope.data.numOfBag =1;
+    $scope.OrderDetails=[];
+    $scope.clientSideList = [
+      { text: "10 kg", value: 10 },
+      { text: "20 kg", value: 20 },
+      { text: "50 kg", value: 50 },
+      { text: "100 kg", value: 100 }
+    ];
     $scope.headerInfoClick = function(){ // Hàm xử lí sự kiện click vào dòng info
-     if ( $scope.headerInfo == false)
-       $scope.headerInfo = true;
-    else  $scope.headerInfo = false;
+      if ( $scope.headerInfo == false)
+          $scope.headerInfo = true;
+      else  
+          $scope.headerInfo = false;
+   }
+   $scope.getKilo=function(item){
+     $scope.weight=item.value;
    }
     $scope.$on('$ionicView.enter', function(ev) {
-        $scope.curCart = CartService.getCurCart();
+        sharedUtils.showLoading();
         ItemService.getAllItems()
         .then(function success(data){
             $scope.items=data;
+            sharedUtils.hideLoading();
         }, function error(msg){
+          sharedUtils.hideLoading();
           console.log(msg);
         });
         });
-    $scope.addItemClick= function(){
+    $scope.AddToCart=function(item){
       var myPopup = $ionicPopup.show({
-      templateUrl: 'templates/addItem.html',
-      scope: $scope,
-      title: 'Thông tin chi tiết',
-      buttons: [
-      { text: 'OK' },
-      ]
-    });}
-    $scope.addItem = function(item){
-      $scope.isShowSaveButon = true;
-      var isExist = false;
-       $scope.curCart.OrderDetails.forEach(function(detail, index){
-          if (detail.Item._id == item._id){
-              isExist = true;
-              detail.NumGas++;
+        scope: $scope,
+        title: 'Bạn muốn mua bao nhiêu kilogram?',
+        templateUrl:'templates/addItem.html',
+        //template:'<ion-radio ng-repeat="item in clientSideList" ng-value="item.value" ng-click="getKilo(item)" ng-model="data"> {{ item.text }} </ion-radio>',
+        buttons: [
+          { text: 'Đóng' },
+        {
+          text: '<b>Thêm</b>',
+          type: 'button-positive',
+          onTap: function(e) {
+            console.log($scope.weight+$scope.data.numOfBag);
+            $scope.updateCurCartService(item,$scope.weight,parseInt($scope.data.numOfBag));
+           
           }
-      });
-      if (!isExist){
-            var detailTemp = {}
-            detailTemp.Item = item;
-            detailTemp.NumGas = 1;
-            detailTemp.NumGasAndCylinder = 0;
-            $scope.curCart.OrderDetails.push(detailTemp);
         }
-      var temp =0;
-      $scope.curCart.OrderDetails.forEach(function(detail,index){
-        temp += detail.Item.price*detail.NumGas + detail.Item.priceFull*detail.NumGasAndCylinder;
+        ]
       });
-      $scope.curCart.Total = temp;
-      CartService.setCurCart($scope.curCart);
-      sharedUtils.showAlert("success","Thêm thành công");
     };
-     $scope.numGasChange=function(detail){
-      if (detail.NumGas <0) detail.NumGas =0
-      else if(detail.NumGas ==0 && detail.NumGasAndCylinder == 0)
-          $scope.curCart.splice($scope.curCart.indexOf(detail),1);
-      else{
-        var temp =0;
-        $scope.curCart.OrderDetails.forEach(function(detail,index){
-          temp += detail.Item.price*detail.NumGas + detail.Item.priceFull*detail.NumGasAndCylinder;
+    $scope.removeFromCart=function(detail){
+       var index = $scope.OrderDetails.indexOf(detail);
+        $scope.OrderDetails.splice(index,1);
+        $scope.Total =0;
+        $scope.OrderDetails.forEach(function(detail,index){
+           $scope.Total += detail.Item.price*detail.kilogramType*detail.numOfKilogramType;
         });
-        $scope.curCart.Total = temp;
-        CartService.setCurCart($scope.curCart);
+        
+    }
+    $scope.numBagChange=function(detail){
+
+      if (detail.numOfKilogramType <0) detail.numOfKilogramType =0
+      else 
+        if(detail.numOfKilogramType ==0)
+          $scope.removeFromCart(detail);
+      else{
+        $scope.Total =0;
+        $scope.OrderDetails.forEach(function(detail,index){
+          $scope.Total += detail.Item.price*detail.kilogramType*detail.numOfKilogramType;;
+        });
+        $scope.updateCart();
       }
     };
-    $scope.numGasAndCylinderChange=function(detail){
-      $scope.isShowSaveButon =true;
-      if (detail.NumGasAndCylinder <0) detail.NumGasAndCylinder =0
-      else if(detail.NumGas ==0 && detail.NumGasAndCylinder == 0)
-          $scope.curCart.splice($scope.curCart.indexOf(detail),1);
-      else{
-        var temp =0;
-        $scope.curCart.OrderDetails.forEach(function(detail,index){
-          temp += detail.Item.price*detail.NumGas + detail.Item.priceFull*detail.NumGasAndCylinder;
-        });
-        $scope.curCart.Total = temp;
-        CartService.setCurCart($scope.curCart);
-      }
-    };
-    $scope.removeDetail=function(detail){
-       $scope.curCart.OrderDetails.splice($scope.curCart.OrderDetails.indexOf(detail),1);
-       var temp =0;
-        $scope.curCart.OrderDetails.forEach(function(detail,index){
-          temp += detail.Item.price*detail.NumGas + detail.Item.priceFull*detail.NumGasAndCylinder;
-        });
-        $scope.curCart.Total = temp;
-        CartService.setCurCart($scope.curCart);
-    };
+    
     $scope.order=function(){
-        if ($scope.curCart.OrderDetails.length <1)  {
-           sharedUtils.showAlert("warning","Bạn chưa chọn sản phẩm nào cả, vui lòng chọn một sản phẩm");
+        if ($scope.OrderDetails.length <1)  {
+           sharedUtils.showAlert("warning","Bạn chưa chọn sản phẩm nào cả, vui lòng chọn một sản phẩm ở màn hình chính");
            return;
         }
         if (!$scope.curUser.Phone){
-           sharedUtils.showAlert("warning","Cung cấp tối thiểu là sđt để đặt hàng");
+           sharedUtils.showAlert("warning","Cung cấp tối thiểu là số điện thoại để đặt hàng");
            return;
         };
         var order ={};
-        order.OrderDetails=$scope.curCart.OrderDetails;
-		    order.Total=$scope.curCart.Total;
+        order.OwnerId="Default_User";
+        order.OrderDetails=$scope.OrderDetails;
+		    order.Total=$scope.Total;
         order.Status=1;
 		    order.Name=$scope.curUser.FullName;
         order.PhoneNumber=$scope.curUser.Phone;
@@ -184,18 +184,67 @@ angular.module('app.controllers', [])
 		    order.OrderDate = new Date();
         OrderService.addOrder(order)
         .then(function success(data){
-            sharedUtils.showAlert("success","Đặt hàng hành công");
+            sharedUtils.showAlert("success","Cảm ơn bạn đã mua hàng, nhân viên của Ugas sẽ gọi trong ít phút tới để xác nhận đơn hàng!");
+            //$scope.curUser.DayRemain = $scope.curUser.DayUse;
+            //UserService.updateUser($scope.curUser);
             // Navigation to Order details
-            $state.go('orderDetail',{id: data._id});
+            console.log(data);
+            $state.go('orderDetail',{id: data});
         }, function error(msg){
-             sharedUtils.showAlert("warning","Đã có lỗi xảy ra, liên hệ: 01649051057 để được hỗ trợ");
+             sharedUtils.showAlert("warning","Đã có lỗi xảy ra, Vui lòng liên hệ đại lý để được hỗ trợ");
         });
     };
+    $scope.updateCurCartService=function(item,kilogramType,numofbag){
+        var isExist = false;
+        if($scope.OrderDetails!=null){
+            $scope.OrderDetails.forEach(function(detail, index){
+                if (detail.Item._id == item._id && detail.kilogramType==kilogramType ){
+                    isExist = true;
+                    detail.numOfKilogramType=detail.numOfKilogramType+numofbag;
+                }
+            });
+        }
+        if (!isExist){
+            var detailTemp = {};
+            detailTemp.Item = item;
+            detailTemp.numOfKilogramType = numofbag;
+            detailTemp.kilogramType=kilogramType;
+            $scope.OrderDetails.push(detailTemp);
+        }
+        $scope.Total=0;
+        $scope.OrderDetails.forEach(function(detail,index){
+          //temp += detail.Item.price*detail.NumGas + detail.Item.priceFull*detail.NumGasAndCylinder;
+          $scope.Total+=detail.Item.price*detail.kilogramType*detail.numOfKilogramType;
+        });
+        console.log($scope.OrderDetails);
+        $scope.showProducts=false;
+        sharedUtils.showAlert("success","Đã bỏ vào giỏ hàng");
+    };
+    $scope.headerAddProductClick = function(){ // Hàm xử lí sự kiện click vào dòng info  
+        if ( $scope.headerAddProduct == false){
+          $scope.headerAddProduct = true;
+        }       
+        else {
+          $scope.headerAddProduct = false;
+        }
+    }
+    $scope.ShowProductsInCart=function(){
+    if ( $scope.showProducts == false){
+            $scope.showProducts = true;
+        }  
+        else {
+            $scope.showProducts = false;
+        } 
+  }
+    
 })
 .controller('ordersCtrl', function($scope,$state,$filter,$rootScope,sharedUtils,OrderService,UserService) {
     $scope.orders = [];
     $scope.numberMaxItem= 10;
     $scope.filterOrder="";
+    $scope.focusNewButton="";
+    $scope.focusDeliverButton="";
+    $scope.focusCancelButton="";
     $rootScope.extras = true;
     $scope.noMoreItemsAvailable = true;
     $scope.$on('$ionicView.enter', function(ev) {
@@ -223,6 +272,56 @@ angular.module('app.controllers', [])
             console.log(msg);
         });
     });
+    $scope.ResetFilter=function(){
+      $scope.filterOrder="";
+      $scope.focusNewButton="";
+      $scope.focusDeliverButton="";
+      $scope.focusCancelButton="";
+    }
+    $scope.FilterOrders=function(status){
+         switch (status) {
+            case 1:{
+              if( $scope.filterOrder==="Đang đặt hàng"){
+                $scope.filterOrder="";
+                $scope.focusNewButton="";
+              }
+              else{
+                $scope.filterOrder="Đang đặt hàng";
+                $scope.focusNewButton="fucusingButton";
+              }
+               $scope.focusDeliverButton="";
+               $scope.focusCancelButton="";             
+                break;
+            }       
+            case 2:{
+               if( $scope.filterOrder==="Đã chuyển đi"){
+                $scope.filterOrder="";
+                $scope.focusDeliverButton="";
+              }
+              else{
+                $scope.filterOrder="Đã chuyển đi";
+                $scope.focusDeliverButton="fucusingButton";
+              }
+               $scope.focusNewButton="";
+               $scope.focusCancelButton="";             
+                break;
+            }
+            default:{
+              if( $scope.filterOrder==="Đã hủy"){
+                $scope.filterOrder="";
+                $scope.focusCancelButton="";
+              }
+              else{
+                $scope.filterOrder="Đã hủy";
+                $scope.focusCancelButton="fucusingButton";
+              }
+               $scope.focusNewButton="";
+               $scope.focusDeliverButton="";             
+                break;
+            }
+
+        }
+    }
     $scope.createNew = function(){
       $state.go('addProduct');
     }
@@ -246,6 +345,7 @@ angular.module('app.controllers', [])
 .controller('productsCtrl', function($scope,$state,$filter,$rootScope,sharedUtils,ItemService,$ionicPopup) {
     $scope.items = [];
     $scope.numberMaxItem= 10;
+    
     $scope.filterOrder="";
     $rootScope.extras = true;
     $scope.noMoreItemsAvailable = true;
@@ -260,9 +360,7 @@ angular.module('app.controllers', [])
           console.log(msg);
         });
     });
-    $scope.createNew = function(){
-     
-    }
+   
     $scope.loadMore = function() {
       console.log('load more');
       if ($scope.numberMaxItem+3<=$scope.orders.length)
@@ -369,63 +467,87 @@ angular.module('app.controllers', [])
     $scope.nors = [1,2,3,4];
 
 })
-.controller('staffDetailCtrl', function($scope,$state,$rootScope,$stateParams,sharedUtils,UserService,OrderService,$ionicPopup) {
+.controller('staffDetailCtrl', function(ReportService,$scope,$state,$rootScope,$stateParams,sharedUtils,UserService,OrderService,$ionicPopup) {
     $scope.curUser = {};
-    $scope.orders = [];
-    $scope.numOrders = 0;
-    $scope.totalOrdersPrice = 0;
+    $scope.headerInfo=true;
     $scope.$on('$ionicView.enter', function(ev) {
-    var userName = $stateParams.username;
-    UserService.getUser(userName)
-    .then(function success(udata){
-        $scope.curUser = udata;
-        OrderService.getOrderByUserId(udata._id)
-        .then(function success(odata){
-          odata.forEach(function(item, index){
-             if(item.Status ==4)
-              $scope.totalOrdersPrice += item.Total;
-             if (item.Status === 0)
-                item.StatusString = "Đã hủy";
-             else if (item.Status === 1)
-                item.StatusString = "Đang đặt hàng";
-             else if (item.Status === 2)
-                item.StatusString = "Đã xác nhận";
-             else if (item.Status === 3)
-                item.StatusString = "Đã chuyển đi";
-             else if (item.Status === 4)
-                item.StatusString = "Thành công";
-           });
-           $scope.numOrders = odata.length;
-           $scope.orders = odata;
-        }, function error(omsg){
-              console.log(omsg);
-              sharedUtils.showAlert("warning","Đã có lỗi xảy ra, liên hệ: 01649051057 để được hỗ trợ");
-        });
-      }, function error(umsg){
-            console.log(umsg);
-            sharedUtils.showAlert("warning","Đã có lỗi xảy ra, liên hệ: 01649051057 để được hỗ trợ");
-      });
+      $scope.Init();
     });
-
+    $scope.headerInfoClick = function(){ // Hàm xử lí sự kiện click vào dòng info
+     if ( $scope.headerInfo == false)
+       $scope.headerInfo = true;
+    else  $scope.headerInfo = false;
+   }
     $scope.orderClick = function(_id){
       $state.go('orderDetail',{id: _id});
-    }
+    };
+    $scope.doRefresh = function() {
+      $scope.Init();
+      $scope.$broadcast('scroll.refreshComplete');
+    };
+    $scope.Init=function(){
+      sharedUtils.showLoading();
+      var userName = $stateParams.username;
+      UserService.getUser(userName)
+      .then(function success(udata){
+          $scope.curUser = udata;
+          $scope.ordersNew=[];
+          $scope.orders=[];
+          $scope.totalOrdersPrice=0;
+          OrderService.getOrderByShipperId(udata._id)
+          .then(function success(odata){
+            odata.forEach(function(item, index){
+                    
+              if (item.Status === 3){
+                  item.StatusString = "Đang nhận giao";
+                  $scope.ordersNew.push(item);
+              }             
+              else if (item.Status === 4){
+                  item.StatusString = "Thành công";
+                  $scope.totalOrdersPrice += item.Total;
+                  $scope.orders.push(item);
+              }   
+            });
+            $scope.numOrders = odata.length;
+            ReportService.getShipperReportedData(udata._id)
+              .then(function success(reportData){
+                sharedUtils.hideLoading();
+                $scope.reportData=reportData;
+                console.log( $scope.reportData);
+              },function error(err){
+                  console.log(err);
+                  sharedUtils.hideLoading();
+                  sharedUtils.showAlert("warning","Đã có lỗi xảy ra, liên hệ: 0873008888 để được hỗ trợ");
+              })
+            
+          }, function error(omsg){
+                console.log(omsg);
+                sharedUtils.hideLoading();
+                sharedUtils.showAlert("warning","Đã có lỗi xảy ra, liên hệ: 0873008888 để được hỗ trợ");
+          });
+        }, function error(umsg){
+              console.log(umsg);
+              sharedUtils.hideLoading();
+              sharedUtils.showAlert("warning","Đã có lỗi xảy ra, liên hệ: 0873008888 để được hỗ trợ");
+        });
+    };
 })
 .controller('customerDetailCtrl', function($scope,$state,$rootScope,$stateParams,sharedUtils,UserService,OrderService,$ionicPopup) {
     $scope.curUser = {};
     $scope.orders = [];
+    $scope.headerInfo =true;
     $scope.numOrders = 0;
     $scope.totalOrdersPrice = 0;
     $scope.$on('$ionicView.enter', function(ev) {
+    sharedUtils.showLoading();
     var userName = $stateParams.username;
     UserService.getUser(userName)
     .then(function success(udata){
         $scope.curUser = udata;
         OrderService.getOrderByUserId(udata._id)
         .then(function success(odata){
+          sharedUtils.hideLoading();
           odata.forEach(function(item, index){
-             if(item.Status ==4)
-              $scope.totalOrdersPrice += item.Total;
              if (item.Status === 0)
                 item.StatusString = "Đã hủy";
              else if (item.Status === 1)
@@ -434,21 +556,29 @@ angular.module('app.controllers', [])
                 item.StatusString = "Đã xác nhận";
              else if (item.Status === 3)
                 item.StatusString = "Đã chuyển đi";
-             else if (item.Status === 4)
+             else if (item.Status === 4){
                 item.StatusString = "Thành công";
+                 $scope.totalOrdersPrice += item.Total;
+             }       
            });
            $scope.numOrders = odata.length;
            $scope.orders = odata;
         }, function error(omsg){
               console.log(omsg);
+              sharedUtils.hideLoading();              
               sharedUtils.showAlert("warning","Đã có lỗi xảy ra, liên hệ: 01649051057 để được hỗ trợ");
         });
       }, function error(umsg){
             console.log(umsg);
+            sharedUtils.hideLoading();
             sharedUtils.showAlert("warning","Đã có lỗi xảy ra, liên hệ: 01649051057 để được hỗ trợ");
       });
     });
-
+     $scope.headerInfoClick = function(){ // Hàm xử lí sự kiện click vào dòng info
+        if ( $scope.headerInfo == false)
+          $scope.headerInfo = true;
+        else  $scope.headerInfo = false;
+      }
     $scope.orderClick = function(_id){
       $state.go('orderDetail',{id: _id});
     }
@@ -458,11 +588,35 @@ angular.module('app.controllers', [])
   $scope.curOrder = {};
   $scope.items = [];
   $scope.curShipper = {};
-  $scope.headerInfo = false;
+  $scope.headerInfo = true;
+  $scope.headerInfoDeliver = true;
+  $scope.headerAddProduct=true;
   $scope.isShowSaveButon = false;
   $scope.isShowConfirmButton = false;
   $scope.isShowUnConfirmButton = false;
   $scope.isShowCancelButton = false;
+  $scope.weight=10; 
+  $scope.data={};
+  $scope.data.numOfBag =1;
+  $scope.clientSideList = [
+    { text: "10 kg", value: 10 },
+    { text: "20 kg", value: 20 },
+    { text: "50 kg", value: 50 },
+    { text: "100 kg", value: 100 }
+  ];
+   $scope.headerAddProductClick = function(){ // Hàm xử lí sự kiện click vào dòng info  
+        if ( $scope.headerAddProduct == false){
+          $scope.headerAddProduct = true;
+        }       
+        else {
+          $scope.headerAddProduct = false;
+        }
+    }
+  $scope.headerInfoDeliverClick = function(){ // Hàm xử lí sự kiện click vào dòng info
+    if ( $scope.headerInfoDeliver == false)
+      $scope.headerInfoDeliver = true;
+  else  $scope.headerInfoDeliver = false;
+  }
   $scope.headerInfoClick = function(){ // Hàm xử lí sự kiện click vào dòng info
      if ( $scope.headerInfo == false)
        $scope.headerInfo = true;
@@ -520,73 +674,74 @@ angular.module('app.controllers', [])
       console.log(msg);
     });
   });
-    $scope.addItem = function(item){
+  $scope.getKilo=function(item){
+     $scope.weight=item.value;
+   }
+   $scope.AddItem = function(item,kilogramType,numofbag){
       $scope.isShowSaveButon = true;
-      var isExist = false;
-       $scope.curOrder.OrderDetails.forEach(function(detail, index){
-          if (detail.Item._id == item._id){
-              isExist = true;
-              detail.NumGas++;
-          }
-      });
-      if (!isExist){
-            var detailTemp = {}
+       var isExist = false;
+        if( $scope.curOrder.OrderDetails!=null){
+             $scope.curOrder.OrderDetails.forEach(function(detail, index){
+                if (detail.Item._id == item._id && detail.kilogramType==kilogramType ){
+                    isExist = true;
+                    detail.numOfKilogramType=detail.numOfKilogramType+numofbag;
+                }
+            });
+        }
+        if (!isExist){
+            var detailTemp = {};
             detailTemp.Item = item;
-            detailTemp.NumGas = 1;
-            detailTemp.NumGasAndCylinder = 0;
+            detailTemp.numOfKilogramType = numofbag;
+            detailTemp.kilogramType=kilogramType;
             $scope.curOrder.OrderDetails.push(detailTemp);
         }
-      var temp =0;
-        $scope.curOrder.OrderDetails.forEach(function(detail,index){
-          temp += detail.Item.price*detail.NumGas + detail.Item.priceFull*detail.NumGasAndCylinder;
+        $scope.curOrder.Total=0;
+         $scope.curOrder.OrderDetails.forEach(function(detail,index){
+          //temp += detail.Item.price*detail.NumGas + detail.Item.priceFull*detail.NumGasAndCylinder;
+          $scope.curOrder.Total+=detail.Item.price*detail.kilogramType*detail.numOfKilogramType;
         });
-        $scope.curOrder.Total = temp;  
-      sharedUtils.showAlert("success","Thêm thành công");
+        console.log($scope.OrderDetails);
+        $scope.showProducts=false;
+        sharedUtils.showAlert("success","Đã bỏ vào giỏ hàng");
     }
-    $scope.addItemClick= function(){
+    $scope.AddToCart= function(item){
       var myPopup = $ionicPopup.show({
       templateUrl: 'templates/addItem.html',
       scope: $scope,
       title: 'Thông tin chi tiết',
       buttons: [
-      { text: 'OK' },
-      ]
+          { text: 'Đóng' },
+        {
+          text: '<b>Thêm</b>',
+          type: 'button-positive',
+          onTap: function(e) {
+            console.log($scope.weight+$scope.data.numOfBag);
+            $scope.AddItem(item,$scope.weight,parseInt($scope.data.numOfBag));
+           
+          }
+        }
+        ]
     });
     }
-    $scope.numGasChange=function(detail){
-      $scope.isShowSaveButon =true;
-      if (detail.NumGas <0) detail.NumGas =0
-      else if(detail.NumGas ==0 && detail.NumGasAndCylinder == 0)
-          $scope.curOrder.OrderDetails.splice($scope.curOrder.OrderDetails.indexOf(detail),1);
-      else{
-        var temp =0;
-        $scope.curOrder.OrderDetails.forEach(function(detail,index){
-          temp += detail.Item.price*detail.NumGas + detail.Item.priceFull*detail.NumGasAndCylinder;
-        });
-        $scope.curOrder.Total = temp;
+   
+    $scope.decreaseNumofBag=function(){
+      if($scope.data.numOfBag>1){
+        $scope.data.numOfBag--;
       }
-    };
-    $scope.numGasAndCylinderChange=function(detail){
-      $scope.isShowSaveButon =true;
-      if (detail.NumGasAndCylinder <0) detail.NumGasAndCylinder =0
-      else if(detail.NumGas ==0 && detail.NumGasAndCylinder == 0)
-          $scope.curOrder.splice($scope.curOrder.indexOf(detail),1);
-      else{
-        var temp =0;
-        $scope.curOrder.OrderDetails.forEach(function(detail,index){
-          temp += detail.Item.price*detail.NumGas + detail.Item.priceFull*detail.NumGasAndCylinder;
-        });
-        $scope.curOrder.Total = temp;
-      }
-    };
+    }
+  $scope.increaseNumofBag=function(){
+    if($scope.data.numOfBag<10){
+      $scope.data.numOfBag++;
+    }
+  }
     $scope.removeDetail=function(detail){
-       $scope.isShowSaveButon = true;
-       $scope.curOrder.splice($scope.curOrder.OrderDetails.indexOf(detail),1);
-       var temp =0;
+       var index = $scope.curOrder.OrderDetails.indexOf(detail);
+        $scope.curOrder.OrderDetails.splice(index,1);
+        var Total =0;
         $scope.curOrder.OrderDetails.forEach(function(detail,index){
-          temp += detail.Item.price*detail.NumGas + detail.Item.priceFull*detail.NumGasAndCylinder;
+           Total += detail.Item.price*detail.kilogramType*detail.numOfKilogramType;
         });
-        $scope.curOrder.Total = temp;
+        $scope.curOrder.Total = Total;
     };
     $scope.save=function(){
       OrderService.updateOrder($scope.curOrder)
@@ -595,7 +750,7 @@ angular.module('app.controllers', [])
         $scope.isShowSaveButon = false;
         $state.go('orders');
       }, function error(msg){
-          sharedUtils.showAlert("warning","Đã có lỗi xảy ra, liên hệ: 01649051057 để được hỗ trợ");
+          sharedUtils.showAlert("warning","Đã có lỗi xảy ra, liên hệ: 0873008888 để được hỗ trợ");
       });
     };
     $scope.confirm=function(){
@@ -606,7 +761,7 @@ angular.module('app.controllers', [])
         $scope.isShowSaveButon = false;
         $state.go('orders');
       }, function error(msg){
-          sharedUtils.showAlert("warning","Đã có lỗi xảy ra, liên hệ: 01649051057 để được hỗ trợ");
+          sharedUtils.showAlert("warning","Đã có lỗi xảy ra, liên hệ: 0873008888 để được hỗ trợ");
       });
     };
     $scope.unConfirm=function(){
@@ -671,81 +826,126 @@ angular.module('app.controllers', [])
 .controller('supportCtrl', function($scope,$rootScope) {
     $rootScope.extras=true;
 })
-.controller('reportCtrl', function($scope,$rootScope,ReportService,sharedUtils) {
+.controller('reportCtrl', function($scope,$rootScope,ReportService,sharedUtils,OrderService,$state ) {
     $scope.dataReport={};
+    $scope.ordersInDelivery=[];
+    $scope.ordersWaiting=[];
+    $scope.totalMoney=0;
+    $scope.successOrder=0;
+    $scope.failedOrder=0;
     $scope.$on('$ionicView.enter', function(ev) {
-        sharedUtils.showLoading();
+        $scope.Init();
+    }); 
+    $scope.orderClick = function(_id){
+      $state.go('orderDetail',{id: _id});
+    };
+    $scope.doRefresh = function() {
+      $scope.Init();
+      $scope.$broadcast('scroll.refreshComplete');
+    };
+    $scope.Init=function(){
+      sharedUtils.showLoading();
         ReportService.getReportedData()
-        .then(function success(data){
+        .then(function success(data){          
+            
             $scope.dataReport=data;
             console.log($scope.dataReport);
-            sharedUtils.hideLoading();
+            $scope.failedOrder=0;
+              $scope.totalMoney=0;
+              $scope.successOrder=0;
+            data.ordersInMonth.forEach(function(item,index){
+              
+              if (item.Status === 0){
+                  $scope.failedOrder++;
+              }               
+              if (item.Status === 4){
+                $scope.totalMoney += item.Total;
+                $scope.successOrder++;
+              }               
+           });
+            OrderService.getAllOrders()
+            .then(function success(odata){
+              sharedUtils.hideLoading();
+                $scope.ordersWaiting=[];
+                $scope.ordersInDelivery=[];
+                odata.forEach(function(item, index){
+                   
+                  if (item.Status === 1){
+                      item.StatusString = "Chờ xác nhận";
+                      $scope.ordersWaiting.push(item);
+                  }                      
+                  else if (item.Status === 3){
+                      item.StatusString = "Đang chuyển đi";
+                      $scope.ordersInDelivery.push(item);
+                  }             
+                      
+                });
+                $scope.numOrders = odata.length;
+                
+              }, function error(omsg){
+                    console.log(omsg);
+                    sharedUtils.showAlert("warning","Đã có lỗi xảy ra, liên hệ: 01649051057 để được hỗ trợ");
+              });
         }, function error(msg){
           sharedUtils.hideLoading();
           console.log(msg);
         });
-    });
+    };
 })
-.controller('addingProduct', function($scope, Camera,ItemService,$cordovaFile, $cordovaFileTransfer) {
-   $scope.takePicture = function (options) {
-	
-      var options = {
-         quality : 100,
-         targetWidth: 300,
-         targetHeight: 300,
-         sourceType: 1
-      };
-
-      Camera.getPicture(options).then(function(imageData) {
-         $scope.imgURI = imageData;
-         console.log($scope.imgURI);
-        $scope.uploadImage();
-      }, function(err) {
-         console.log(err);
+.controller('addingProduct', function($ionicPopup,$scope,ItemService,sharedUtils,$state) {
+  $scope.item={};
+  $scope.item.name=null;
+  $scope.item.description=null;
+  $scope.item.price=null;
+  $scope.item.image=null;
+  $scope.item.stock=200;
+  $scope.item.available=true;
+  $scope.FocusCss="";
+  $scope.imageUrl="";
+  $scope.ChoosingPhoto=function(){
+    var myPopup = $ionicPopup.show({
+        scope: $scope,
+        title: 'Hình ảnh mẫu',
+        templateUrl:'templates/ChoosePhoto.html',
+        //template:'<ion-radio ng-repeat="item in clientSideList" ng-value="item.value" ng-click="getKilo(item)" ng-model="data"> {{ item.text }} </ion-radio>',
+        buttons: [
+          { text: 'Đóng' },
+        {
+          text: '<b>Thêm</b>',
+          type: 'button-positive'      
+          }
+        
+        ]
       });
-		
-   };
-    $scope.uploadImage = function() {
-      // Destination URL
-      var url = "http://192.168.1.17:3000/api/items/";
-      var options = new FileUploadOptions();
-      options.fileKey = "file";
-      options.fileName = "test name";
-      options.mimeType = "Image";
-      var targetPath =$scope.imgURI;
-      var params = {};
-      params.value1 = "test";
-      params.value2 = "param";
-      console.log(options);
-      var ft = new FileTransfer();
-      ft.upload(targetPath, encodeURI("http://192.168.1.17:3000/api/items/"), function(r){
-        console.log(r);
-      }, function(e){
-          console.log(e);
-      }, options);
-    
-      /*// File for Upload
-      var targetPath =$scope.imgURI;
-      console.log(targetPath);
-    
-      // File name only
-      var filename = "hihi";
-    
-      var options = {
-        fileKey: "file",
-        fileName: filename,
-        chunkedMode: false,
-        mimeType: "image",
-        params : {'fileName': filename}
-      };
-       $cordovaFileTransfer.upload(url, targetPath, options)
-      .then(function(result) {
-        // Success!
-      }, function(err) {
-        // Error
-      }, function (progress) {
-        // constant progress updates
-      });*/
-      }
-
-});
+  }
+  $scope.SetPhoto=function(index){
+    console.log(index); 
+    $scope.item.image=index;
+    $scope.imageUrl='img/'+ index +'.jpg';
+  }
+  $scope.CreateProductInfo=function(){
+    console.log($scope.item);
+    if($scope.item.image===null){
+      sharedUtils.showAlert("warning","Bạn chưa chọn hình ảnh cho sản phẩm");
+      return;
+    }
+     if($scope.item.name===null){
+      sharedUtils.showAlert("warning","Bạn chưa nhập tên sản phẩm");
+      return;
+    }
+    if($scope.item.price===null){
+      sharedUtils.showAlert("warning","Bạn chưa giá cho sản phẩm");
+      return;
+    }
+    if($scope.item.description===null){
+      sharedUtils.showAlert("warning","Bạn chưa nhập mô tả cho sản phẩm");
+      return;
+    }
+    ItemService.addItem($scope.item).then(function success(res){
+      sharedUtils.showAlert("success","Thêm mới sản phẩm thành công");
+      $state.go("products");
+    },function error(err){
+      sharedUtils.showAlert("warning","Đã xãy ra lỗi");
+    })
+  }
+  });

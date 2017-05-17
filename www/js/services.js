@@ -1,10 +1,11 @@
 angular.module('app.services', [])
 
 .factory("UserService", function($http,$q){ // Service cho user
+  var hostURL='http://192.168.1.200:3000/api/';
   var self = { 
     'getUser': function(username){  // Hàm lấy user
         var d = $q.defer();
-        $http.get("http://192.168.1.17:3000/api/users/"+username)
+        $http.get(hostURL+"users/"+username)
         .success(function(data){
           d.resolve(data);
         })
@@ -15,7 +16,7 @@ angular.module('app.services', [])
     },
     'getAllUser': function(){  // Hàm lấy user
         var d = $q.defer();
-        $http.get("http://192.168.1.17:3000/api/users")
+        $http.get(hostURL+"users")
         .success(function(data){
             
             d.resolve(data);
@@ -27,7 +28,7 @@ angular.module('app.services', [])
     },
     'getAllStaff': function(){  // Hàm lấy user
         var d = $q.defer();
-        $http.get("http://192.168.1.17:3000/api/staffs")
+        $http.get(hostURL+"staffs")
         .success(function(data){
             d.resolve(data);
         })
@@ -40,11 +41,12 @@ angular.module('app.services', [])
   return self;
 })
 .factory("ItemService", function($http,$q){ // Service cho post
-  var self = {  // tạo một đối tượng service, chứa các hàm và biến
+    var hostURL='http://192.168.1.200:3000/api/';
+    var self = {  // tạo một đối tượng service, chứa các hàm và biến
     'items' : [], // chứa posts lấy về
     'getItemById': function(itemId){ // Hàm lấy tất cả bài của một userId
         var d = $q.defer();
-        $http.get("http://192.168.1.17:3000/api/items")
+        $http.get(hostURL+"items")
         .success(function(data){
           d.resolve(data);
         })
@@ -55,7 +57,7 @@ angular.module('app.services', [])
     },
     'getAllItems': function(){ // Hàm lấy tất cả các bài post hiện tại
         var d = $q.defer();
-        $http.get("http://192.168.1.17:3000/api/items")
+        $http.get(hostURL+"items")
         .success(function(data){
           d.resolve(data);
         })
@@ -64,9 +66,9 @@ angular.module('app.services', [])
         });
         return d.promise;
     },
-    'updateItem': function(item){ // Hàm cập nhật thông tin user
+    'updateItem': function(item){ // Hàm cập nhật thông tin product
         var d = $q.defer();
-        $http.put("http://192.168.1.17:3000/api/items/"+item._id,item)
+        $http.put(hostURL+"items/"+item._id,item)
         .success(function(data){
           d.resolve("success");
         })
@@ -75,9 +77,9 @@ angular.module('app.services', [])
         });
         return d.promise;
     },
-    'addItem': function(item){ // Hàm cập nhật thông tin user
+    'addItem': function(item){ // Hàm cập nhật thông tin product
         var d = $q.defer();
-        $http.post("http://192.168.1.17:3000/api/items/",item)
+        $http.post(hostURL+"items",item)
         .success(function(data){
           d.resolve("success");
         })
@@ -156,10 +158,22 @@ angular.module('app.services', [])
 
 }) 
 .factory('OrderService', function($http,$q){
+    var hostURL='http://192.168.1.200:3000/api/';
     var self = {  // tạo một đối tượng service, chứa các hàm và biến
     'getOrderByUserId': function(userId){ // Hàm lấy tất cả bài của một userId      
         var d = $q.defer();
-        $http.get("http://192.168.1.17:3000/api/orders/1/"+userId)    
+        $http.get(hostURL+"orders/1/"+userId)    
+        .success(function(data){
+          d.resolve(data);
+        })
+        .error(function(msg){
+            d.reject("error");
+        });
+        return d.promise;
+    },
+    'getOrderByShipperId': function(userId){ // Hàm lấy tất cả bài của một userId      
+        var d = $q.defer();
+        $http.get(hostURL+"orders/2/"+userId)    
         .success(function(data){
           d.resolve(data);
         })
@@ -170,7 +184,7 @@ angular.module('app.services', [])
     },
     'getOrderById': function(itemId){ // Hàm lấy tất cả bài của một userId
         var d = $q.defer();
-        $http.get("http://192.168.1.17:3000/api/orders/"+itemId)
+        $http.get(hostURL+"orders/"+itemId)
         .success(function(data){
           d.resolve(data);
         })
@@ -181,7 +195,7 @@ angular.module('app.services', [])
     },
     'getAllOrders': function(){ // Hàm lấy tất cả bài của một userId
         var d = $q.defer();
-        $http.get("http://192.168.1.17:3000/api/orders")
+        $http.get(hostURL+"orders")
         .success(function(data){
           d.resolve(data);
         })
@@ -192,7 +206,7 @@ angular.module('app.services', [])
     },
     'updateOrder': function(order){ // Hàm cập nhật thông tin user
         var d = $q.defer();
-        $http.put("http://192.168.1.17:3000/api/orders/"+order._id,order)
+        $http.put(hostURL+"orders/"+order._id,order)
         .success(function(data){
           d.resolve("success");
         })
@@ -203,9 +217,9 @@ angular.module('app.services', [])
     },
     'addOrder': function(newOrder){ // Hàm thêm một order mới
         var d = $q.defer();
-        $http.post("http://192.168.1.17:3000/api/orders/",newOrder) 
+        $http.post(hostURL+"orders/",newOrder) 
         .success(function(data){
-          d.resolve("success");
+          d.resolve(data._id);
         })
         .error(function(msg){
             d.reject("error");
@@ -216,11 +230,22 @@ angular.module('app.services', [])
   return self;
   })
 .factory('ReportService', function($http,$q){
-
+    var hostURL='http://192.168.1.200:3000/api/';
     var self = {  // tạo một đối tượng service, chứa các hàm và biến
     'getReportedData': function(){ // Hàm lấy tất cả bài của một userId      
         var d = $q.defer();
-        $http.get("http://192.168.1.17:3000/api/GetReportData")    
+        $http.get(hostURL+"GetReportData")    
+        .success(function(data){
+          d.resolve(data);
+        })
+        .error(function(msg){
+            d.reject("error");
+        });
+        return d.promise;
+    },
+    'getShipperReportedData': function(userId){ // Hàm lấy tất cả bài của một userId     
+        var d = $q.defer();
+        $http.get(hostURL+"getshipperdatareport/"+userId)    
         .success(function(data){
           d.resolve(data);
         })
@@ -233,20 +258,3 @@ angular.module('app.services', [])
   };
   return self;
 })
-.factory('Camera', function($q) {
-   return {
-      getPicture: function(options) {
-         var q = $q.defer();
-
-         navigator.camera.getPicture(function(result) {
-            q.resolve(result);
-         }, function(err) {
-            q.reject(err);
-         }, options);
-
-         return q.promise;
-      }
-   }
-
-});
-

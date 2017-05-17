@@ -1,10 +1,39 @@
 <ion-view style="" class=" " id="page10" title="Thêm sản phẩm">
-    <ion-content>
-        <img ng-show="imgURI !== undefined" ng-src="{{imgURI}}">
-        <img ng-show="imgURI === undefined" ng-src="http://placehold.it/300x300">
-        <button class = "button" ng-click = "takePicture()">Take Picture</button>
-        <button class = "button" ng-click = "choosePhoto()">Open Gallery</button>
-        <img ng-src = "{{user.picture}}">
+    <ion-content padding="true">
+        <div class="card">
+        <div class="item item-divider item-icon-right">
+          <i class="icon" ></i>
+          Thông Tin Sản phẩm
+        </div>
+        <ion-list >
+            <ion-item class = "item-remove-animate item-icon-left" >
+                <label class="item item-input"><input type="text" ng-model="item.name" placeholder="Tên sản phẩm"> </label>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+            <ion-item class = "item-remove-animate item-icon-left" >
+                <label class="item item-input"><input type="text" ng-model="item.description" placeholder="Mô tả"> </label> 
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+            <ion-item class = "item-remove-animate item-icon-left" >
+                <label class="item item-input"><input type="number" ng-model="item.price" placeholder="Giá 1 kg"> </label>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+            <div class="row">
+                <div class="col col-33 col-offset-33">
+                    <img  ng-src="{{imageUrl}}" style="margin-left: 10px;margin-top: 5px"> 
+                </div>
+            </div>
+            <div class="row">
+               <button class="button button-full button-royal" ng-click="ChoosingPhoto()">
+                    Chọn hình ảnh minh họa
+                </button>
+            </div>
+            
+            <div class="row">
+              <a style="width: 100%;" class="button icon-left ion-ios-color-wand-outline button-balanced" ng-click ="CreateProductInfo()">Thêm Mới Sản phẩm</a>
+          </div>
+        </ion-list>
+      </div>
     </ion-content>
     
 </ion-view>

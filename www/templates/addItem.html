@@ -1,13 +1,11 @@
-<label class="item item-input" style="background-color: aliceblue;">
-    <i class="icon ion-search placeholder-icon"></i>
-    <input type="text" ng-model="filterOrder.name" placeholder="Tìm tên sản phẩm" >
-</label>
-<ion-list>
-    <div class="card" ng-repeat="item in items| filter:filterOrder.name" ng-click="addItem(item)"> 
-        <p style="font-size: 12px; color: gray; margin-bottom: 0px; margin-left: 10px;margin-top: 15px"><b>{{item.name}}</b></p>
-        <p style="font-size: 12px; color:gray; margin-bottom: 0px; margin-left: 10px;" >SL còn: {{item.stock}} - SL Vỏ: {{item.emptyGas}}</p>
-        <p style="font-size: 12px; color:gray; margin-bottom: 0px; margin-left: 10px;" ></p>
-        <p style="font-size: 12px; color: green; margin-bottom: 0px; margin-left: 10px;"><b>Gas: {{item.price| currency:"":0}}đ</b></p> 
-        <p style="font-size: 12px; color: green; margin-bottom: 10px; margin-left: 10px;"><b>Vỏ + Gas: {{item.priceFull| currency:"":0}}đ</b></p>                
-    </div>
-</ion-list>
+<ion-radio style="border-radius: 20px!important;margin-bottom: 2px;" ng-repeat="item in clientSideList" ng-value="item.value" ng-click="getKilo(item)" ng-model="weight">
+     {{ item.text }} 
+</ion-radio>
+<div class= "col " style="margin-bottom: 0px;margin-top: 0px;">
+    <input style="color: dimgray; font-size: 12px;width: 100px; padding-bottom: 0px;padding-top: 0px;background: transparent;" type="text" value="SL bao đặt:  {{data.numOfBag}}" disabled="disabled">
+</div>
+<div class="item range">
+  <i class="icon ion-ios-minus-outline" ng-click="decreaseNumofBag()"></i>
+  <input min=1 max=10 value="{{data.numOfBag}}" ng-model="data.numOfBag" type="range" name="numOfBags">
+  <i class="icon ion-ios-plus-outline" ng-click="increaseNumofBag()"></i>
+</div>

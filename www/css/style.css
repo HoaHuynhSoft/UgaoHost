@@ -414,3 +414,25 @@ margin-top:10px;
   border-radius: 50%;
   -webkit-border-radius: 50%;
 }
+.scrollhoriz {
+height: 250px;
+  overflow-x: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+.fucusingButton{
+    background: #886aea !important;
+    color: #fff !important;
+}
+ .popup-container .popup {
+    width: 90%;
+ }
+ .ProductImage{
+     width: 100%;
+     height: 100px;
+ }
+ .FocusedImage{
+         border: 2px solid #886aea;
+ }
+ img:hover {
+    border: 2px solid #886aea;
+}

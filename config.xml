@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <widget id="com.ugashost.android" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>UgasHost</name>
+  <name>UgaoHost</name>
   <description>
-        Ugas Host
+        Ugao Host
     </description>
-  <author email="makakura@outlook.com.vn" href="http://example.com.com/">
-        Makakura
+  <author email="thanhhoait1995@outlook.com.vn" href="http://example.com.com/">
+        HtH
     </author>
   <content src="index.html"/>
   <access origin="*"/>

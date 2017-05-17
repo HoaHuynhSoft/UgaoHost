@@ -2,25 +2,20 @@
     <ion-content class="has-header" padding="true">
       <label class="item item-input" style="background-color: aliceblue;">
             <i class="icon ion-search placeholder-icon"></i>
-            <input type="text" ng-model="filterOrder" placeholder="Tìm theo ngày đặt hàng / Số điện thoại" >
+            <input type="text" ng-model="filterOrder" ng-focus="ResetFilter()" placeholder="Tìm theo ngày đặt hàng / Số điện thoại" >
       </label>
+      
       <div class="card" style=" margin-top: 5px" >
-          <p style=" margin-top: 10px; margin-left: 10px;margin-bottom: 0px; color:gray;">Lọc kết quả:</p>
+          <p style=" margin-top: 10px; margin-left: 10px;margin-bottom: 0px; color:gray;">Lọc theo trạng thái:</p>
           <div class="row">
-             <div class="col text-center" >
-                <button class="button button-outline button-royal" style=" padding-left: 10px;padding-right: 10px;">
-                 Trạng thái
-                </button>
+             <div class="col col-33 text-center" >
+                <button class="button button-outline button-royal" ng-class="focusNewButton" ng-click="FilterOrders(1)"  style="width: 100%;padding: 0px;">Đ/H mới</button>
              </div>
-             <div class="col text-center" >
-               <button class="button button-outline button-royal" style=" padding-left: 10px;padding-right: 10px;">
-                 Tổng tiền
-                </button>
+             <div class="col col-33 text-center" >
+               <button class="button button-outline button-royal" ng-class="focusDeliverButton" ng-click="FilterOrders(2)" style="width: 100%;padding: 0px;">Đang Chuyển</button>
              </div>
-             <div class="col text-center" >
-               <button class="button button-outline button-royal" style=" padding-left: 10px;padding-right: 10px;">
-                 Ngày đặt
-                </button>
+             <div class="col col-33 text-center" >
+               <button class="button button-outline button-royal" ng-class="focusCancelButton" ng-click="FilterOrders(3)" style="width: 100%;padding: 0px;">Đã hủy</button>
              </div>
           </div>
       </div>
@@ -36,7 +31,7 @@
       	<div class="row"> <div style="height: 100px;"></div></div>
       <ion-infinite-scroll ng-if="!noMoreItemsAvailable" icon="ion-loading-c" on-infinite="loadMore()" distance="10%"> </ion-infinite-scroll>
     </ion-content>
-    <div id="floating-button" data-toggle="tooltip" data-placement="left" ui-sref="myCart" ng-click="createNew()">
+    <div id="floating-button" data-toggle="tooltip" data-placement="left" ui-sref="myCart">
 			<p class="plus">+</p>
 	</div>
 </ion-view>
