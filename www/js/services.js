@@ -1,8 +1,8 @@
+var hostURL='https://ugaoserver.herokuapp.com/api/';
+var headers = {"Authorization": "Basic dXNlcjoxMjM0NTY="};
 angular.module('app.services', [])
 
 .factory("UserService", function($http,$q){ // Service cho user
-    var headers = {"Authorization": "Basic YWJjOjEyMw=="};
-  var hostURL='http://192.168.1.200:3000/api/';
   var self = { 
     'getUser': function(username){  // Hàm lấy user
         var d = $q.defer();
@@ -42,8 +42,6 @@ angular.module('app.services', [])
   return self;
 })
 .factory("ItemService", function($http,$q){ // Service cho post
-    var headers = {"Authorization": "Basic YWJjOjEyMw=="};
-    var hostURL='http://192.168.1.200:3000/api/';
     var self = {  // tạo một đối tượng service, chứa các hàm và biến
     'items' : [], // chứa posts lấy về
     'getItemById': function(itemId){ // Hàm lấy tất cả bài của một userId
@@ -94,7 +92,6 @@ angular.module('app.services', [])
   return self;
 })
 .factory("CartService", function($http,$q){ // Service cho post
-    var headers = {"Authorization": "Basic YWJjOjEyMw=="};
   var self = {  // tạo một đối tượng service, chứa các hàm và biến
     'cart' : {
         OrderDetails:[],
@@ -161,8 +158,6 @@ angular.module('app.services', [])
 
 }) 
 .factory('OrderService', function($http,$q){
-    var headers = {"Authorization": "Basic YWJjOjEyMw=="};
-    var hostURL='http://192.168.1.200:3000/api/';
     var self = {  // tạo một đối tượng service, chứa các hàm và biến
     'getOrderByUserId': function(userId){ // Hàm lấy tất cả bài của một userId      
         var d = $q.defer();
@@ -234,8 +229,6 @@ angular.module('app.services', [])
   return self;
   })
 .factory('ReportService', function($http,$q){
-    var headers = {"Authorization": "Basic YWJjOjEyMw=="};
-    var hostURL='http://192.168.1.200:3000/api/';
     var self = {  // tạo một đối tượng service, chứa các hàm và biến
     'getReportedData': function(){ // Hàm lấy tất cả bài của một userId      
         var d = $q.defer();
