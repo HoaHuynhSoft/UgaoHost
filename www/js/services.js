@@ -1,4 +1,5 @@
-var hostURL='https://ugaoserver.herokuapp.com/api/';
+//var hostURL='https://ugaoserver.herokuapp.com/api/';
+var hostURL='http://localhost:3000/api/';
 var headers = {"Authorization": "Basic dXNlcjoxMjM0NTY="};
 angular.module('app.services', [])
 
