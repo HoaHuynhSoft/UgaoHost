@@ -345,7 +345,6 @@ angular.module('app.controllers', [])
 .controller('productsCtrl', function($scope,$state,$filter,$rootScope,sharedUtils,ItemService,$ionicPopup) {
     $scope.items = [];
     $scope.numberMaxItem= 10;
-    
     $scope.filterOrder="";
     $rootScope.extras = true;
     $scope.noMoreItemsAvailable = true;
@@ -360,7 +359,6 @@ angular.module('app.controllers', [])
           console.log(msg);
         });
     });
-   
     $scope.loadMore = function() {
       console.log('load more');
       if ($scope.numberMaxItem+3<=$scope.orders.length)
@@ -373,8 +371,8 @@ angular.module('app.controllers', [])
       $scope.$broadcast('scroll.infiniteScrollComplete');
     };
     $scope.itemClick=function (item) {
-    $scope.curItemClick=item;
-    var myPopup = $ionicPopup.show({
+      $scope.curItemClick=item;
+      var myPopup = $ionicPopup.show({
       templateUrl: 'templates/itemDetail.html',
       scope: $scope,
       title: 'Thông tin chi tiết',
@@ -384,11 +382,14 @@ angular.module('app.controllers', [])
         text: '<b>Lưu</b>',
         type: 'button-positive',
         onTap: function(e) {
+          sharedUtils.showLoading();
           ItemService.updateItem($scope.curItemClick)
           .then(function success(data){
+            sharedUtils.hideLoading();
             sharedUtils.showAlert("success","Sửa sản phẩm thành công");
           }, function error(msg){
-          sharedUtils.showAlert("warning","Đã có lỗi xảy ra, Vui lòng kiểm tra kết nối");
+            sharedUtils.hideLoading();
+            sharedUtils.showAlert("warning","Đã có lỗi xảy ra, Vui lòng kiểm tra kết nối");
           });
         }
       }
