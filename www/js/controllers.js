@@ -252,16 +252,30 @@ angular.module('app.controllers', [])
        OrderService.getAllOrders()
         .then(function success(data){
            data.forEach(function(item, index){
-             if (item.Status === 0)
-                item.StatusString = "Đã hủy";
-             else if (item.Status === 1)
-                item.StatusString = "Đang đặt hàng";
-             else if (item.Status === 2)
-                item.StatusString = "Đã xác nhận";
-             else if (item.Status === 3)
-                item.StatusString = "Đã chuyển đi";
-             else if (item.Status === 4)
-                item.StatusString = "Thành công";
+            if (item.Status === 0){
+              item.css="cancel";
+              item.StatusString = "Đã hủy";
+            }
+                
+            if (item.Status === 1){
+              item.css="waiting";
+              item.StatusString = "Đang đặt hàng";
+            }    
+            if (item.Status === 2){
+              item.css="confirmed";
+              item.StatusString = "Đã xác nhận";
+            }
+                
+            if (item.Status === 3){
+              item.css="waiting";
+              item.StatusString = "Đã chuyển đi";
+            }
+                
+            if (item.Status === 4){
+              item.css="Done";
+              item.StatusString = "Thành công";
+            }
+                
            });
            $scope.orders = data;
            $scope.noMoreItemsAvailable = false;
@@ -592,6 +606,7 @@ angular.module('app.controllers', [])
   $scope.headerInfo = true;
   $scope.headerInfoDeliver = true;
   $scope.headerAddProduct=true;
+  $scope.showProducts=false;
   $scope.isShowSaveButon = false;
   $scope.isShowConfirmButton = false;
   $scope.isShowUnConfirmButton = false;
@@ -815,6 +830,14 @@ angular.module('app.controllers', [])
       });
       
     };
+  $scope.ShowProductsInCart=function(){
+    if ( $scope.showProducts == false){
+            $scope.showProducts = true;
+        }  
+        else {
+            $scope.showProducts = false;
+        } 
+  }
 })
 
 .controller('settingsCtrl', function($scope,$rootScope,

@@ -436,3 +436,15 @@ height: 250px;
  img:hover {
     border: 2px solid #886aea;
 }
+.cancel{
+    color: gray;
+}
+.waiting{
+    color:yellowgreen;
+}
+.done{
+    color: green;
+}
+.confirmed{
+    color: blueviolet;
+}

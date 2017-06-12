@@ -24,7 +24,7 @@
             <img  src="img/client/orders.png" style="margin-left: 10px;margin-top: 5px"> 
             <p style="font-size: 12px; color: gray; margin-bottom: 0px"><b>SĐT: {{order.PhoneNumber}}</b></p>
             <p style="font-size: 12px; color:gray; margin-bottom: 0px;" >Ngày: {{order.OrderDate | date:"dd/MM/yyyy 'lúc' h:mma"}}</p>
-            <p style="font-size: 12px; color: green; margin-bottom: 0px;">Trạng thái: {{order.StatusString}}</p>
+            <p style="font-size: 12px; color: green; margin-bottom: 0px;">Trạng thái: <b ng-class="order.css">{{order.StatusString}}</b></p>
             <p style="font-size: 12px; color: green; margin-bottom: 0px"><b>Tổng: {{order.Total| currency:"":0}}đ</b></p>                 
         </div>
       </ion-list>
