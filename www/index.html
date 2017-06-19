@@ -61,10 +61,10 @@
     <script src="js/directives.js"></script>
   </head>
   <body ng-app="app" animation="slide-left-right-ios7">
-  <div style="">
+  <div>
 
     <!--#5. indexCtrl -->
-    <ion-side-menus ng-controller="indexCtrl" data-componentid="side-menu21" style="" enable-menu-with-back-views="false">
+    <ion-side-menus ng-controller="indexCtrl" data-componentid="side-menu21" enable-menu-with-back-views="false">
         <ion-side-menu-content>
             <ion-nav-bar class="bar-royal">
                 <ion-nav-back-button></ion-nav-back-button>
@@ -89,17 +89,19 @@
             </ion-header-bar>
             <ion-content class="stable-bg has-expanded-header">
                 <ion-list data-componentid="list1" class=" " id="menu-list1">
-                    <ion-item data-componentid="list-item1" style="" menu-close="" ui-sref="report" id="menu-list-item1" class="item-icon-left  ">
+                    <ion-item data-componentid="list-item1" menu-close="" ui-sref="report" id="menu-list-item1" class="item-icon-left  ">
                         <i class="icon ion-ios-eye-outline"></i>Thống Kê</ion-item>
-                    <ion-item data-componentid="list-item3" style="" menu-close="" ui-sref="orders" id="menu-list-item3" class="item-icon-left  ">
+                    <ion-item data-componentid="list-item3" menu-close="" ui-sref="orders" id="menu-list-item3" class="item-icon-left  ">
                         <i class="icon ion-ios-paper-outline"></i>Quản lí đơn hàng</ion-item>
-                    <ion-item data-componentid="list-item8" style="" menu-close="" ui-sref="products" id="menu-list-item8" class="item-icon-left  ">
+                    <ion-item data-componentid="list-item8" menu-close="" ui-sref="products" id="menu-list-item8" class="item-icon-left  ">
                         <i class="icon ion-ios-cart-outline"></i>Quản lí hàng hóa</ion-item>
-                    <ion-item data-componentid="list-item5" style="" menu-close="" ui-sref="customers" id="menu-list-item5" class="item-icon-left  ">
+                    <ion-item data-componentid="list-item5" menu-close="" ui-sref="customers" id="menu-list-item5" class="item-icon-left  ">
                         <i class="icon ion-ios-people-outline"></i>Quản lí khách hàng</ion-item>
-                    <ion-item data-componentid="list-item5" style="" menu-close="" ui-sref="staff" id="menu-list-item5" class="item-icon-left  ">
+                    <ion-item data-componentid="list-item5" menu-close="" ui-sref="staff" id="menu-list-item5" class="item-icon-left  ">
                         <i class="icon ion-ios-person-outline"></i>Quản lí nhân viên</ion-item>
-                    <ion-item data-componentid="list-item6" style="" menu-close="" ui-sref="support" id="menu-list-item6" class="item-icon-left  ">
+                    <ion-item data-componentid="list-item5" menu-close="" ui-sref="feedbacks" id="menu-list-item5" class="item-icon-left  ">
+                        <i class="icon ion-ios-person-outline"></i>Phản hồi</ion-item>
+                    <ion-item data-componentid="list-item6" menu-close="" ui-sref="support" id="menu-list-item6" class="item-icon-left  ">
                         <i class="icon ion-ios-help-outline"></i>Hỗ trợ</ion-item>
                     <ion-item data-componentid="list-item7" ng-click="logout()" menu-close="" ui-sref="login" id="menu-list-item7" class="item-icon-left  ">
                         <i class="icon ion-log-out"></i>Đăng xuất</ion-item>

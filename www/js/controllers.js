@@ -972,4 +972,45 @@ angular.module('app.controllers', [])
       sharedUtils.showAlert("warning","Đã xãy ra lỗi");
     })
   }
-  });
+})
+.controller('feedbacksCtrl', function($scope,$rootScope,sharedUtils,UserService) {
+    $scope.feedbacks = [];
+    $scope.numberMaxItem= 10;
+    $scope.noMoreItemsAvailable = true;
+    $scope.$on('$ionicView.enter', function(ev) {
+      sharedUtils.showLoading();
+       UserService.getAllFeedback()
+        .then(function success(data){
+          data.forEach(function(item, index){
+            if (item.catalogue == 1)
+              item.catalogue = "Phục vụ";
+            else if (item.catalogue == 2)
+              item.catalogue = "Đặt hàng";
+            else if (item.catalogue == 3)
+              item.catalogue = "Sản phẩm";
+            else if (item.catalogue == 4)
+              item.catalogue = "Khác";
+          });
+           $scope.feedbacks = data;
+           $scope.noMoreItemsAvailable = false;
+           sharedUtils.hideLoading();
+        }, function error(msg){
+          sharedUtils.showAlert("warning","Không lấy được danh sách phản hồi");
+            sharedUtils.hideLoading();
+            console.log(msg);
+        });
+    });
+     $scope.loadMore = function() {
+      if ($scope.numberMaxItem+3<=$scope.orders.length)
+       {
+         $scope.numberMaxItem+=3
+         $scope.noMoreItemsAvailable = false;
+       }
+      else
+        $scope.noMoreItemsAvailable = true;
+      $scope.$broadcast('scroll.infiniteScrollComplete');
+    }
+    $scope.ResetFilter=function(){
+      $scope.filterOrder="";
+    }
+});

@@ -17,11 +17,15 @@ angular.module('app.routes', [])
     templateUrl: 'templates/myCart.html',
     controller: 'myCartCtrl'
   })
-
   .state('orders', {
     url: '/orders',
     templateUrl: 'templates/orders.html',
     controller: 'ordersCtrl'
+  })
+  .state('feedbacks', {
+    url: '/feedbacks',
+    templateUrl: 'templates/feedbacks.html',
+    controller: 'feedbacksCtrl'
   })
   .state('report', {
     url: '/report',

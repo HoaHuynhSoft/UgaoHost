@@ -28,6 +28,17 @@ angular.module('app.services', [])
         });
         return d.promise;
     },
+    'getAllFeedback': function(){  // Hàm lấy user
+        var d = $q.defer();
+        $http.get(hostURL+"feedbacks",{headers: headers})
+        .success(function(data){
+            d.resolve(data);
+        })
+        .error(function(msg){
+            d.reject("error");
+        });
+        return d.promise;
+    },
     'getAllStaff': function(){  // Hàm lấy user
         var d = $q.defer();
         $http.get(hostURL+"staffs",{headers: headers})
