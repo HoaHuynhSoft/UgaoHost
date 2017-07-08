@@ -23,15 +23,19 @@ angular.module('app.controllers', [])
     });
     $scope.login = function(user) {
       if (!(user.UserName)||!(user.Pass)){
-        sharedUtils.showAlert("warning","Bạn nhập dữ liệu chưa đúng");
+        sharedUtils.showAlert("warning","Vui lòng nhập tài khoản và mật khẩu!");
         return;
       }
+      sharedUtils.showLoading();
       UserService.getUser(user.UserName) // lấy user bằng user name
         .then(function success(data){
-          //sharedUtils.showAlert("warning",user.UserName);
-           //console.log(data);
-            if(user.UserName == data.UserName && user.Pass == data.Pass && data.Type == 2){
-              //sharedUtils.showAlert("warning","compare user data");
+            sharedUtils.hideLoading();
+            if(data==null){
+              sharedUtils.showAlert("warning","Tài khoản không tồn tại!");
+              return;
+            }
+            if(user.UserName.toLowerCase() == data.UserName.toLowerCase() 
+            && user.Pass.toLowerCase() == data.Pass.toLowerCase() && data.Type == 2){
               $window.localStorage['username'] = user.UserName;
               $window.localStorage['pass'] = user.Pass;
               $rootScope.userName =data.FullName;
@@ -45,11 +49,11 @@ angular.module('app.controllers', [])
               $scope.user = {};
             }
               else{
-                sharedUtils.showAlert("warning","Entered data is not valid");
+                sharedUtils.showAlert("warning","Thông tin tài khoản không hợp lệ");
               }
         }, function error(msg){
           sharedUtils.showAlert("warning",msg);
-          console.log(msg);
+          sharedUtils.hideLoading();
         });
     };
 
