@@ -52,8 +52,8 @@ angular.module('app.controllers', [])
                 sharedUtils.showAlert("warning","Thông tin tài khoản không hợp lệ");
               }
         }, function error(msg){
-          sharedUtils.showAlert("warning",msg);
-          sharedUtils.hideLoading();
+          sharedUtils.showAlert("warning","Connection Fail");
+          console.log(msg);
         });
     };
 
@@ -188,7 +188,7 @@ angular.module('app.controllers', [])
 		    order.OrderDate = new Date();
         OrderService.addOrder(order)
         .then(function success(data){
-            sharedUtils.showAlert("success","Cảm ơn bạn đã mua hàng, nhân viên của Ugas sẽ gọi trong ít phút tới để xác nhận đơn hàng!");
+            sharedUtils.showAlert("success","Tạo đơn hàng mới thành công");
             //$scope.curUser.DayRemain = $scope.curUser.DayUse;
             //UserService.updateUser($scope.curUser);
             // Navigation to Order details
@@ -252,6 +252,9 @@ angular.module('app.controllers', [])
     $rootScope.extras = true;
     $scope.noMoreItemsAvailable = true;
     $scope.$on('$ionicView.enter', function(ev) {
+      $scope.Init();
+    });
+    $scope.Init=function(){
       sharedUtils.showLoading();
        OrderService.getAllOrders()
         .then(function success(data){
@@ -289,7 +292,11 @@ angular.module('app.controllers', [])
             sharedUtils.hideLoading();
             console.log(msg);
         });
-    });
+    }
+    $scope.doRefresh = function() {
+      $scope.Init();
+      $scope.$broadcast('scroll.refreshComplete');
+    };
     $scope.ResetFilter=function(){
       $scope.filterOrder="";
       $scope.focusNewButton="";
