@@ -49,7 +49,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services',
           alertPopup.then(function(res) {
               $state.go('orders');
           });
-        }
+        } 
       },
       function(msg){
         console.log('onNotification callback successfully registered: ' + msg);
