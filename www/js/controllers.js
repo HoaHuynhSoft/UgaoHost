@@ -154,17 +154,16 @@ angular.module('app.controllers', [])
     }
     $scope.numBagChange=function(detail){
 
-      if (detail.numOfKilogramType <0) detail.numOfKilogramType =0
-      else 
-        if(detail.numOfKilogramType ==0)
-          $scope.removeFromCart(detail);
-      else{
-        $scope.Total =0;
-        $scope.OrderDetails.forEach(function(detail,index){
-          $scope.Total += detail.Item.price*detail.kilogramType*detail.numOfKilogramType;;
-        });
-        $scope.updateCart();
+      if (detail.numOfKilogramType <0){
+        sharedUtils.showAlert("warning","Vui lòng nhập số lượng");
+        detail.numOfKilogramType =1
       }
+      var temp =0;
+      $scope.OrderDetails.forEach(function(detail,index){
+        temp += detail.Item.price*detail.kilogramType*detail.numOfKilogramType;;
+      });
+      $scope.Total= temp;
+      $scope.updateCart();
     };
     
     $scope.order=function(){
