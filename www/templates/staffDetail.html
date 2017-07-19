@@ -40,7 +40,7 @@
                 </div>
                 <div class="col" style="background-color: #d53f40; margin-left:5px;border-radius: 5px!important;">
                     <p style="color: white;">Tổng tiền đã giao</p>
-                    <p style="color: white;">{{reportData.totalMoneyInDay}}</p>
+                    <p style="color: white;">{{reportData.totalMoneyInDay | currency:"":0}}</p>
                 </div>
             </div>
             <div class="row text-center" style="margin-bottom: 5px;margin-top: 5px;">
@@ -50,7 +50,7 @@
                 </div>
                 <div class="col" style="background-color: #1caf91; margin-left:5px;border-radius: 5px!important;">
                     <p style="color: white;">Số tiền cần nhận</p>
-                    <p style="color: white;">{{reportData.totalMoneyReceive}}</p>
+                    <p style="color: white;">{{reportData.totalMoneyReceive | currency:"":0}}</p>
                 </div>
             </div>
          </div>
