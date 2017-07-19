@@ -12,7 +12,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services',
     $ionicConfigProvider.scrolling.jsScrolling(false);
     $ionicConfigProvider.tabs.position('bottom'); // other values: top
 })
-.run(function($ionicPlatform,$rootScope,$state) {
+.run(function($ionicPlatform,$rootScope,$state,$ionicPopup) {
   $rootScope.extras = false;
 
   $ionicPlatform.ready(function() {
@@ -41,9 +41,14 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services',
         if(data.wasTapped){
           if(data.type =="1")
             $state.go('orderDetail',{id: data.id});
-          else  if(data.type =="2")
-            $state.go('orders');
         }else{
+          var alertPopup = $ionicPopup.alert({
+              title: 'Thông báo',
+              template: 'Có đơn hàng mới'
+          });
+          alertPopup.then(function(res) {
+              $state.go('orders');
+          });
         }
       },
       function(msg){
