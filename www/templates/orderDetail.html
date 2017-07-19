@@ -54,20 +54,16 @@
       <div class="card">
         <div class="item item-divider item-icon-right" ng-click = "headerInfoDeliverClick()">
           <i class="icon" ng-class="{'ion-ios-arrow-right':headerInfoDeliver,'ion-ios-arrow-down':!headerInfoDeliver}"></i>
-          Thông chuyển hàng
+          Thông tin người chuyển hàng
         </div>
         <ion-list ng-show="!headerInfoDeliver">
             <ion-item class = "item-remove-animate item-icon-left" >
-                <a ng-href="tel: {{curOrder.PhoneNumber}}" style="color: green">Người chuyển: {{curOrder.Name}}</a>
+                <a ng-href="tel: {{curOrder.PhoneNumber}}" style="color: green">Người chuyển: {{curOrder.Shipper.FullName}}</a>
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </ion-item>
             <ion-item class = "item-remove-animate item-icon-left" >
-                <a ng-href="tel: {{curOrder.PhoneNumber}}" style="color: green">Sđt: {{curOrder.PhoneNumber}}</a>
+                <a ng-href="tel: {{curOrder.PhoneNumber}}" style="color: green">Sđt: {{curOrder.Shipper.Phone}}</a>
                 <i class="icon ion-ios-telephone icon-balanced" style="color: green"></i>   
-            </ion-item>
-            <ion-item class = "item-remove-animate item-icon-left" >
-                <h2 style="font-size: 14px; white-space: normal;">Giờ nhận chuyển đơn hàng: {{curOrder.Address}}</h2>
-                <i class="icon ion-chevron-right icon-accessory"></i>
             </ion-item>
         </ion-list>
      </div>

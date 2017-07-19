@@ -45,7 +45,12 @@ angular.module('app.controllers', [])
               $ionicSideMenuDelegate.canDragContent(true);  // Sets up the sideMenu dragable
               $rootScope.extras = true;
               sharedUtils.hideLoading();
-              $state.go('report', {}, {location: "replace"});
+              if ($rootScope.orderId == null){
+                $state.go('report', {}, {location: "replace"});
+                $rootScope.loginStatus = true;
+              }
+              else
+                $state.go('orderDetail',{id: data.id});
               $scope.user = {};
             }
               else{

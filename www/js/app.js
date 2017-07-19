@@ -39,8 +39,10 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services',
     FCMPlugin.onNotification(
       function(data){
         if(data.wasTapped){
-          if(data.type =="1")
+          if ($rootScope.loginStatus == true)
             $state.go('orderDetail',{id: data.id});
+          else
+            $rootScope.orderId = data.id;
         }else{
         } 
       },
